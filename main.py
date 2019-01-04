@@ -6,9 +6,21 @@ import sys
 import matplotlib.pyplot as plt
 from data_aug import *
 import cv2
+from scipy.io import loadmat
+from read_gt import *
 # create image paths list
 IMAGE_SIZE = 256
 CH = 3
+gt_paths = []
+gt_paths.append('sample/gt/000001.mat')
+gt_paths.append('sample/gt/000000.mat')
+
+gts = load_ground_truth(gt_paths,(256,256))
+
+#plt.imshow(gts[1].reshape(256,256))
+#plt.show()
+#quit()
+
 image_paths = []
 #image_paths.append('sample/normal/img_5001.png')
 image_paths.append('sample/normal/000001.png')
