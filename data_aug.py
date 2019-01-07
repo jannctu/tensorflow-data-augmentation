@@ -18,7 +18,6 @@ def load_images(X_img_file_paths):
         else:
             images.append(np.expand_dims(im, 0))
 
-
     images = np.concatenate(images)
     #sz = images.shape
     #if len(sz) < 4:
@@ -65,7 +64,6 @@ def central_scale_images(X_imgs, scales,IMAGE_SIZE,CH):
 
     X_scale_data = np.array(X_scale_data, dtype=np.float32)
     return X_scale_data
-
 
 def flip_images(X_imgs,IMAGE_SIZE,CH):
     X_flip = []
@@ -177,7 +175,7 @@ def add_salt_pepper_noise(X_imgs,salt_vs_pepper,amount):
 
 import cv2
 
-def add_gaussian_noise(X_imgs):
+def add_gaussian_noise(X_imgs,p1,p2):
     gaussian_noise_imgs = []
     row, col, ch = X_imgs[0].shape
 
@@ -185,8 +183,10 @@ def add_gaussian_noise(X_imgs):
     for X_img in X_imgs:
         gaussian = np.random.random((row, col, 1)).astype(np.float32)
         #gaussian = np.random.normal(mean, sigma, (row, col, ch)).astype(np.float32)
-        gaussian = np.concatenate((gaussian, gaussian, gaussian), axis=2)
-        gaussian_img = cv2.addWeighted(X_img, 0.75, 0.25 * gaussian, 0.25, 0)
+        if ch > 1:
+            gaussian = np.concatenate((gaussian, gaussian, gaussian), axis=2)
+        #gaussian_img = cv2.addWeighted(X_img, 0.9, 0.1 * gaussian, 0.1, 0)
+        gaussian_img = cv2.addWeighted(X_img, p1, p2 * gaussian, p2, 0)
         gaussian_noise_imgs.append(gaussian_img)
     gaussian_noise_imgs = np.array(gaussian_noise_imgs, dtype=np.float32)
     return gaussian_noise_imgs

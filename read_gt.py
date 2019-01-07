@@ -9,7 +9,9 @@ from skimage.transform import resize
 def load_ground_truth(gt_file_path,target_size):
     fuse_thick = []
     for gt_file in gt_file_path:
+        print('load : '+gt_file)
         gt = loadmat(gt_file)
+        #print(gt)
         gt = gt['groundTruth'][0]
 
         #gt[9][0][0][2]
@@ -19,6 +21,7 @@ def load_ground_truth(gt_file_path,target_size):
         # 2 = fuse logical thicker
         bdry = gt[9][0][0][2]
         bdry = resize(bdry.astype(float), output_shape=target_size)
+        bdry[bdry > 0] = 1
         fuse_thick.append(bdry)
 
     fuse_thick = np.concatenate([np.expand_dims(a, 0) for a in fuse_thick])
